@@ -1,38 +1,111 @@
-# ecdh_simulator_gui_Repo
-ECDH Key Exchange Simulator (Multi-Curve Support)
+# ECDH Key Exchange Simulator GUI
+
+[简体中文说明](./README.zh-CN.md)
+
+Desktop GUI simulator for exploring the Elliptic Curve Diffie-Hellman (ECDH) key exchange process with multiple standard curves.
 
 ## Overview
-This Python-based GUI application simulates the Elliptic Curve Diffie-Hellman (ECDH) key exchange protocol. It allows users to generate and manage ECDH private and public key pairs for two parties (Host and Device), perform the key exchange, and derive shared secrets and session keys. The simulator supports multiple standard elliptic curves, providing a visual and interactive way to understand the ECDH process.
+
+This project is a Python + tkinter desktop application that demonstrates how two parties derive the same shared secret through ECDH. The interface lets you generate, import, and compare Host/Device key pairs, inspect the shared secret, and derive a session key with HKDF-SHA256.
+
+It is intended for learning, debugging, and interoperability checks when working with raw ECC key material in hexadecimal form.
 
 ## Features
-- **Multi-Curve Support:** Select from various standard elliptic curves (e.g., SECP256R1, SECP384R1, SECP521R1, SECP224R1, SECP256K1).   
-- **Key Pair Generation:** Easily generate new private and public key pairs for both Host and Device.   
-- **Flexible Key Input:** Input private and public keys in both standard hexadecimal and C-array hexadecimal formats.   
-- **Shared Secret Calculation:** Automatically computes the shared secret between the Host and Device.   
-- **Session Key Derivation:** Uses HKDF (HMAC-based Key Derivation Function) with SHA256 to derive a robust session key from the shared secret.   
-- **Verification:** Instantly verifies if the derived shared secrets match between the Host and Device.   
-- **Clear Interface:** A clean and intuitive graphical user interface built with tkinter.   
+
+- Multi-curve support:
+  - SECP256R1 (NIST P-256)
+  - SECP384R1 (NIST P-384)
+  - SECP521R1 (NIST P-521)
+  - SECP224R1 (NIST P-224)
+  - SECP256K1 (default)
+- Generate Host and Device private/public key pairs
+- Import key material in:
+  - standard hex format (for example `0x1234abcd`)
+  - C-array style hex format (for example `0x12 0x34 0xab 0xcd`)
+- Perform ECDH exchange and verify whether both parties derive the same shared secret
+- Derive a session key from the shared secret with HKDF-SHA256
+- Optionally display the full shared point `X||Y` for MCU / embedded-side verification
+- Clear and compare outputs for both communication parties in one screen
 
 ## Requirements
-Before running the application, ensure you have Python 3 installed. You'll also need the cryptography library.   
-You can install the necessary library using pip:   
-`pip install cryptography`   
-**How to Run**   
-Save the code: Save the provided Python code into a file named ecdh_simulator_gui.py.
-Open a terminal/command prompt: Navigate to the directory where you saved the file.
-Run the application: Execute the following command:   
-`python ecdh_simulator_gui.py`
-## Usage
-- **Select an Elliptic Curve:** Choose your desired curve from the "Elliptic Curve Algorithm Selection" dropdown menu. Remember to regenerate keys if you change the curve.
-- **Generate Keys:**
-Click "Generate Host Key Pair" and "Generate Device Key Pair" to automatically create new private and public keys for both parties.
-Alternatively, you can manually enter private and public keys in either "Standard Hex" or "C Array Format" fields, then click "Generate Private Key" or "Generate Public Key" to update the associated fields or derive missing keys.
-Perform Key Exchange: Once both Host and Device have valid key pairs, click the "Perform Key Exchange & Verify" button.
-- **View Results:** The "Host Shared Secret & Derived Key" and "Device Shared Secret & Derived Key" sections will display the calculated shared secrets and derived session keys, along with a verification status.
-- **Clear All:** Use the "Clear All Inputs & Outputs" button to reset the application.
 
-## Contributing
-Feel free to fork this repository, open issues, or submit pull requests. Any contributions to improve the simulator are welcome!
+- Python 3.9+ recommended
+- [cryptography](https://pypi.org/project/cryptography/)
+- `tkinter` runtime support
+
+> `tkinter` is usually bundled with the official Python installer on Windows and many macOS builds.  
+> On Linux, you may need to install it separately (for example, `python3-tk` on Debian/Ubuntu).
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/zoujinlin/ecdh_simulator_gui_Repo.git
+   cd ecdh_simulator_gui_Repo
+   ```
+
+2. Install the Python dependency:
+
+   ```bash
+   pip install cryptography
+   ```
+
+3. Ensure your Python environment has `tkinter` available.
+
+## Run
+
+Start the GUI application from the repository root:
+
+```bash
+python ecdh_simulator_gui.py
+```
+
+## Usage Example
+
+1. Launch the application.
+2. Select an elliptic curve from the dropdown list.
+3. Click **Generate Host Key Pair** and **Generate Device Key Pair**.
+4. Optionally replace the generated keys with your own data in standard hex or C-array format.
+5. Click **Perform Key Exchange & Verify**.
+6. Review:
+   - Host shared secret output
+   - Device shared secret output
+   - HKDF-derived session keys
+   - verification result showing whether both shared secrets match
+7. If needed, enable **Show shared point X||Y (MCU verification)** to inspect the full point coordinates.
+
+### Accepted Key Formats
+
+Standard hex:
+
+```text
+0x11223344aabbccdd
+```
+
+C-array style hex:
+
+```text
+0x11 0x22 0x33 0x44 0xaa 0xbb 0xcc 0xdd
+```
+
+## Project Structure
+
+```text
+ecdh_simulator_gui_Repo/
+├── ecdh_simulator_gui.py   # Main tkinter GUI application
+├── README.md               # English documentation
+├── README.zh-CN.md         # Simplified Chinese documentation
+└── LICENSE                 # MIT license
+```
+
+## Notes / Disclaimer
+
+- This project is primarily for learning, simulation, and interoperability verification.
+- The displayed keys and secrets are intended for local testing only. Do not use exposed demo key material in real systems.
+- If you change the selected curve, regenerate both parties' key pairs before running the exchange again.
+- Running the GUI requires a graphical desktop environment; headless servers may not support direct launch.
 
 ## License
-This project is open-source and available under the MIT License.
+
+This project is licensed under the [MIT License](./LICENSE).
